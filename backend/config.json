@@ -1,0 +1,8 @@
+{
+    "db": {
+        "is_initiated": false
+    },
+    "admin": {
+        "is_setup": false
+    }
+}

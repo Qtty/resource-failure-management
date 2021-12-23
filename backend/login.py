@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
 from utility import check_args
-from db_api import db
+from database.db_api import db
 
 
 class Login(Resource):
@@ -16,9 +16,9 @@ class Login(Resource):
             return "Missing Arguments", 400
 
         data = request.get_json()
-        result = db.get_user(data["mail"], data["password"])
+        result = db.users().get_user(data["mail"], data["password"])
 
         if result:
-            return {"auth": True, "admin": False}, 200
+            return result, 200
 
         return {"auth": False}, 403
