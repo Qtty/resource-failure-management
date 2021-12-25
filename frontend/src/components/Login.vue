@@ -1,5 +1,16 @@
 <template>
-  <v-container>
+  <v-container 
+  class="d-flex"
+  v-if="!is_auth"
+  >
+    <v-card
+    class="flex-grow-1 flex-shrink-0 ma-auto pa-4"
+    max-width="60%"
+    >
+      <v-card-title class="justify-center">Login</v-card-title>
+
+      <v-divider></v-divider>
+
       <v-form
         ref="form"
         v-model="valid"
@@ -39,6 +50,7 @@
           Check Auth
         </v-btn>
       </v-form>
+    </v-card>
   </v-container>
 </template>
 
@@ -47,6 +59,7 @@
     name: 'Login',
 
     data: () => ({
+      is_auth: false,
       valid: true,
       show: false,
       email: '',
@@ -63,30 +76,41 @@
       validate: function() {
         this.$refs.form.validate();
 
-        this.$http.post('http://localhost:5000/api/login', {
+        this.$http.post(`${this.$api}/login`, {
           mail: this.email,
           password: this.password
         })
         .then(response => {
           console.log(response.body);
           this.$cookies.set('Authorization', 'Bearer ' + response.body['session'], '1d');
-          // redirect to profile
+          this.is_auth = true;
+          this.checkAuth();
         }, response => {
+          this.is_auth = false;
           console.log(response.body);
         });
+
       },
 
       checkAuth: function() {
-        this.$http.get('http://localhost:5000/api/login', {
+        this.$http.get(`${this.$api}/login`, {
           headers: {'Authorization': this.$cookies.get('Authorization')}
         })
         .then(response => {
           console.log(response.body);
-          return true;
-        });
+          this.is_auth = true;
+          if (response.body.is_admin)
+            this.$router.push("admin");
+          else
+            this.$router.push("profile");
 
-        return false;
+        }, () => {
+          this.is_auth = false;
+        });
       }
+    },
+    created() {
+      this.checkAuth();
     }
   }
 </script>

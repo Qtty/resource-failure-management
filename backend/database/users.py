@@ -1,8 +1,7 @@
 from hashlib import sha256
 from datetime import datetime
 from os import getenv
-from bson.json_util import dumps
-
+from bson.objectid import ObjectId
 
 class Users():
 
@@ -10,22 +9,43 @@ class Users():
         self.users = db['users']
         self.SALT = getenv("SALT")
 
-    def get_user(self, mail: str, password: str) -> dict:
-        res = self.users.find_one({
-            "mail": mail,
-            "password": self.hash_pwd(password)
-        })
+    def get_user(self, mail: str = None, password: str = None, _id: str = None) -> dict:
+        if _id:
+            res = self.users.find_one({
+                "_id": ObjectId(_id)
+            })
+        else:
+            res = self.users.find_one({
+                "mail": mail,
+                "password": self.hash_pwd(password)
+            })
 
         if res:
             return res
         return None
 
-    def insert_user(self, mail: str, password: str, is_admin: str = False) -> None:
-        self.users.insert_one({
-            "mail": mail,
-            "password": self.hash_pwd(password),
-            "is_admin": is_admin,
-            "date": datetime.utcnow()
+    def get_users(self) -> dict:
+        res = self.users.find({
+            'is_resp': True
+        })
+
+        res = [{
+            '_id': i['_id'].binary.hex(),
+            'nom': i['nom'],
+            'prenom': i['prenom'],
+            'mail': i['mail']
+        } for i in res]
+
+        return sorted(res, key=lambda i: (i['nom'], i['prenom']))
+
+    def insert_user(self, user: dict) -> None:
+        user['date'] = datetime.utcnow()
+        user['password'] = self.hash_pwd(user['password'])
+        return self.users.insert_one(user)
+
+    def delete_user(self, _id: str) -> None:
+        self.users.delete_one({
+            "_id": ObjectId(_id)
         })
 
     def hash_pwd(self, password: str) -> bytes:
