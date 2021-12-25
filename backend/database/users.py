@@ -17,7 +17,7 @@ class Users():
         })
 
         if res:
-            return dumps(res)
+            return res
         return None
 
     def insert_user(self, mail: str, password: str, is_admin: str = False) -> None:
