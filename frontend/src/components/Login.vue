@@ -4,8 +4,8 @@
   v-if="!is_auth"
   >
     <v-card
-    class="flex-grow-1 flex-shrink-0 ma-auto pa-4"
-    max-width="60%"
+    class="flex-grow-1 ma-auto pa-4"
+    max-width="80%"
     >
       <v-card-title class="justify-center">Login</v-card-title>
 
@@ -102,7 +102,7 @@
           if (response.body.is_admin)
             this.$router.push("admin");
           else
-            this.$router.push("profile");
+            this.$router.push("responsable");
 
         }, () => {
           this.is_auth = false;

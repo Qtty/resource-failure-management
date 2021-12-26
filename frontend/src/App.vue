@@ -7,7 +7,7 @@
     >
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Logo"
+          alt="Univ Logo"
           class="shrink mr-2"
           contain
           :src="require('./assets/univ-logo.png')"

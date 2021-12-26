@@ -2,7 +2,7 @@
     <v-container class="d-flex flex-row align-start" v-if="is_admin">
             <v-card
             class="pa-1"
-            max-width="280"
+            max-width="20%"
             tile
             >
                 <v-list shaped>
@@ -13,7 +13,7 @@
                         <v-list-item
                         v-for="(item, i) in items"
                         :key="i"
-                        @click="updateAdding(i)"
+                        @click="selectedItem = i"
                         >
                         <v-list-item-icon>
                             <v-icon v-text="item.icon"></v-icon>
@@ -27,8 +27,8 @@
             </v-card>
 
             <v-card
-            class="flex-grow-1 flex-shrink-0 mx-4 pa-4"
-            v-show="!is_adding"
+            class="flex-grow-1 mx-4 pa-4"
+            v-show="updateTab == 0"
             >
                 <v-card-title class="justify-center">Responsables de Maintenance</v-card-title>
 
@@ -70,8 +70,8 @@
             </v-card>
 
             <v-card
-            class="flex-grow-1 flex-shrink-0 mx-4 pa-4"
-            v-show="is_adding"
+            class="flex-grow-1 mx-4 pa-4"
+            v-show="updateTab == 1"
             >
                 <v-card-title class="justify-center">Ajouter un Responsable de Maintenance</v-card-title>
 
@@ -146,7 +146,6 @@
             nomRules: [v => !!v || 'Nom is required'],
             prenom: '',
             prenomRules: [v => !!v || 'Prenom is required'],
-            is_adding: false,
             is_admin: false,
             resps: [],
             selectedItem: 0,
@@ -166,6 +165,7 @@
                     this.is_admin = true;
                 }, response => {
                     this.is_admin = false;
+                    this.$router.push('login');
                     console.log(response);
                 });
             },
@@ -182,9 +182,6 @@
                     console.log(response);
                 })
             },
-            updateAdding: function(action) {
-                this.is_adding = action;
-            },
             validate: function() {
                 this.$refs.form.validate();
 
@@ -195,6 +192,11 @@
                     console.log(response);
                     this.getResps();
                 })
+            }
+        },
+        computed: {
+            updateTab: function() {
+                return this.selectedItem;
             }
         },
         created() {

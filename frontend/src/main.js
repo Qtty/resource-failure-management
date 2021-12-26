@@ -10,7 +10,7 @@ Vue.use(VueCookies);
 
 Vue.config.productionTip = false
 
-Vue.prototype.$api = 'http://localhost:5000/api'
+Vue.prototype.$api = 'http://192.168.0.24:5000/api'
 
 new Vue({
   vuetify,

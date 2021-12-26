@@ -24,7 +24,7 @@ class Users():
             return res
         return None
 
-    def get_users(self) -> dict:
+    def get_users(self) -> list:
         res = self.users.find({
             'is_resp': True
         })
@@ -38,7 +38,7 @@ class Users():
 
         return sorted(res, key=lambda i: (i['nom'], i['prenom']))
 
-    def insert_user(self, user: dict) -> None:
+    def insert_user(self, user: dict) -> dict:
         user['date'] = datetime.utcnow()
         user['password'] = self.hash_pwd(user['password'])
         return self.users.insert_one(user)

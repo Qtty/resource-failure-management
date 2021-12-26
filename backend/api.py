@@ -4,6 +4,9 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from login import Login
 from admin import Admin
+from resources import Resources
+from responsable import Responsable
+from tickets import Tickets
 from os import urandom, environ
 
 
@@ -18,7 +21,10 @@ app.config["JWT_SECRET_KEY"] = "yellow submarine"
 
 api.add_resource(Login, "/api/login")
 api.add_resource(Admin, "/api/admin")
+api.add_resource(Resources, "/api/resources")
+api.add_resource(Responsable, "/api/responsable")
+api.add_resource(Tickets, '/api/tickets')
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

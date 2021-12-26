@@ -1,6 +1,5 @@
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import get_jwt
 from flask_jwt_extended import verify_jwt_in_request
