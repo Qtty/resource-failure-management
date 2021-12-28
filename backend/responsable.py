@@ -1,3 +1,4 @@
+import qrcode
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import get_jwt_identity
@@ -5,6 +6,7 @@ from flask_jwt_extended import get_jwt
 from flask_jwt_extended import verify_jwt_in_request
 from utility import check_args
 from database.db_api import db
+from os import environ
 
 
 def check_if_resp() -> str:
@@ -73,6 +75,19 @@ class Responsable(Resource):
 
         data = request.get_json()
 
-        # visualise
+        res = db.resources().get_resource(_id=data['_id'])
 
-        return '', 200
+        if not res:
+            return "resource n'existe pas", 404
+
+        if check_if_resp_of_ressource(data['_id'], get_jwt_identity()):
+
+            res['url'] = f'{environ["FRONT"]}/resource/{res["_id"]}'
+            res['qrcode_url'] = f'{environ["DOMAIN"]}/qrcode/{res["_id"]}.png'
+
+            img = qrcode.make(res['url'])
+            img.save(f'qrcodes/{data["_id"]}.png')
+
+            return res, 200
+
+        return 'Pas Autoriser pour consommer cette resource', 401

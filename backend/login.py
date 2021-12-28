@@ -32,7 +32,7 @@ class Login(Resource):
             }
             return result, 200
 
-        return {"auth": False}, 403
+        return "email ou mot de passe invalide", 403
 
     @jwt_required()
     def get(self):

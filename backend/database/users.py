@@ -10,18 +10,22 @@ class Users():
         self.SALT = getenv("SALT")
 
     def get_user(self, mail: str = None, password: str = None, _id: str = None) -> dict:
-        if _id:
-            res = self.users.find_one({
-                "_id": ObjectId(_id)
-            })
-        else:
-            res = self.users.find_one({
-                "mail": mail,
-                "password": self.hash_pwd(password)
-            })
+        try:
+            if _id:
+                res = self.users.find_one({
+                    "_id": ObjectId(_id)
+                })
+            else:
+                res = self.users.find_one({
+                    "mail": mail,
+                    "password": self.hash_pwd(password)
+                })
 
-        if res:
-            return res
+            if res:
+                return res
+        except Exception:
+                return None
+
         return None
 
     def get_users(self) -> list:
@@ -44,9 +48,12 @@ class Users():
         return self.users.insert_one(user)
 
     def delete_user(self, _id: str) -> None:
-        self.users.delete_one({
-            "_id": ObjectId(_id)
-        })
+        try:
+            self.users.delete_one({
+                "_id": ObjectId(_id)
+            })
+        except Exception:
+            pass
 
     def hash_pwd(self, password: str) -> bytes:
         r = self.SALT + password

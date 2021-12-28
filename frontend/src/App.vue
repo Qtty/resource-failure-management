@@ -18,6 +18,14 @@
 
       <v-spacer></v-spacer>
 
+      <v-btn
+      @click="removeAuth"
+      icon
+      v-show="show_logout"
+      >
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
+
     </v-app-bar>
 
     <v-main>
@@ -37,5 +45,17 @@ export default {
   data: () => ({
     //
   }),
+  methods: {
+    removeAuth: function() {
+      this.$cookies.remove('Authorization');
+      this.$is_logged = false;
+    }
+  },
+  computed: {
+    show_logout: function() {
+      console.log(this.$is_logged);
+      return this.$is_logged;
+    }
+  }
 };
 </script>

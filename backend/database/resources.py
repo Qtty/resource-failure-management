@@ -8,27 +8,30 @@ class Resources():
         self.resources = db['resources']
 
     def get_resource(self, _id: str, resp_id: str = None, include_resp: bool = False) -> dict:
-        if not resp_id:
-            res = self.resources.find_one({
-                '_id': ObjectId(_id)
-            })
-        else:
-            res = self.resources.find_one({
-                '_id': ObjectId(_id),
-                'resp_id': ObjectId(resp_id)
-            })
+        try:
+            if not resp_id:
+                res = self.resources.find_one({
+                    '_id': ObjectId(_id)
+                })
+            else:
+                res = self.resources.find_one({
+                    '_id': ObjectId(_id),
+                    'resp_id': ObjectId(resp_id)
+                })
 
-        if res:
-            resource = {
-                '_id': res['_id'].binary.hex(),
-                'description': res['description'],
-                'localisation': res['localisation']
-            }
+            if res:
+                resource = {
+                    '_id': res['_id'].binary.hex(),
+                    'description': res['description'],
+                    'localisation': res['localisation']
+                }
 
-            if include_resp:
-                resource['resp_id'] = res['resp_id'].binary.hex()
+                if include_resp:
+                    resource['resp_id'] = res['resp_id'].binary.hex()
 
-            return resource
+                return resource
+        except Exception:
+            return None
 
         return None
 

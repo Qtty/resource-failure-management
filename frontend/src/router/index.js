@@ -4,6 +4,7 @@ import Login from '../components/Login'
 import Admin from '../components/Admin'
 import Responsable from '../components/Responsable'
 import Resource from '../components/Resource'
+import Etiquette from '../components/Etiquette'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,17 @@ const routes = [
     path: '/resource/:_id',
     name: 'Resource',
     component: Resource
+  },
+  {
+    path: '/etiquette/:_id',
+    name: 'Etiquette',
+    component: Etiquette
+  },
+  {
+    path: '/',
+    redirect: {
+      name: 'Login'
+    }
   }
 ]
 

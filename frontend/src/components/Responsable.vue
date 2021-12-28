@@ -55,7 +55,15 @@
                                     <v-list-item-subtitle v-text="item.description + ' - ' + item.localisation"></v-list-item-subtitle>
                                 </v-list-item-content>
 
-                                <v-list-item-action>
+                                <v-list-item-action class="d-flex flex-row">
+                                    <v-btn
+                                    class="mx-4"
+                                    icon
+                                    @click="visualise(item._id)"
+                                    >
+                                        <v-icon color="grey lighten-1">mdi-eye</v-icon>
+                                    </v-btn>
+
                                     <v-btn
                                     icon
                                     @click="deleteResource(item._id)"
@@ -109,6 +117,16 @@
                     </v-btn>
 
                 </v-form>
+
+                <v-alert
+                class="my-3"
+                dismissible
+                text
+                type="success"
+                v-model="added"
+                >
+                    Resource Creé
+                </v-alert>
             </v-card>
 
             <v-card
@@ -164,6 +182,7 @@
         data: () => ({
             valid: true,
             show: false,
+            added: false,
             description: '',
             descriptionRules: [
                 v => !!v || 'Description est requise',
@@ -191,23 +210,19 @@
                     params: {'type': 'resource'}
                 })
                 .then(response => {
-                    console.log(response);
                     this.resources = response.body;
                     this.is_resp = true;
-                }, response => {
+                }, () => {
                     this.is_resp = false;
-                    console.log(response);
                     this.$router.push('login');
                 });
             },
             deleteResource: function(_id) {
-                console.log(_id);
                 this.$http.delete(`${this.$api}/resources`, {
                     headers: {'Authorization': this.$cookies.get('Authorization')},
                     body: {'_id': _id}
                 })
-                .then(response => {
-                    console.log(response);
+                .then(() => {
                     this.getResources();
                 }, response => {
                     console.log(response);
@@ -219,7 +234,6 @@
                     params: {'resp_id': true}
                 })
                 .then(response => {
-                    console.log(response.body);
                     this.tickets = response.body;
                 });
             },
@@ -232,6 +246,9 @@
                     this.getTickets();
                 })
             },
+            visualise: function(_id) {
+                window.open(`${this.$domain}/etiquette/${_id}`);
+            },
             validate: function() {
                 this.$refs.form.validate();
 
@@ -240,6 +257,7 @@
                 })
                 .then(response => {
                     console.log(response);
+                    this.added = true;
                 });
 
                 this.$refs.form.reset();

@@ -123,6 +123,16 @@
                     </v-btn>
 
                 </v-form>
+
+                <v-alert
+                class="my-3"
+                dismissible
+                text
+                type="success"
+                v-model="added"
+                >
+                    Responsable Ajouté
+                </v-alert>
             </v-card>
 
     </v-container>
@@ -135,6 +145,7 @@
         data: () => ({
             valid: true,
             show: false,
+            added: false,
             email: '',
             emailRules: [
                 v => !!v || 'E-mail is required',
@@ -160,9 +171,9 @@
                     headers: {'Authorization': this.$cookies.get('Authorization')}
                 })
                 .then(response => {
-                    console.log(response);
                     this.resps = response.body;
                     this.is_admin = true;
+                    this.$is_logged = true;
                 }, response => {
                     this.is_admin = false;
                     this.$router.push('login');
@@ -170,13 +181,11 @@
                 });
             },
             deleteResp: function(_id) {
-                console.log(_id);
                 this.$http.delete(`${this.$api}/admin`, {
                     headers: {'Authorization': this.$cookies.get('Authorization')},
                     body: {'_id': _id}
                 })
-                .then(response => {
-                    console.log(response);
+                .then(() => {
                     this.getResps();
                 }, response => {
                     console.log(response);
@@ -190,8 +199,10 @@
                 })
                 .then(response => {
                     console.log(response);
+                    this.added = true;
                     this.getResps();
-                })
+                });
+                this.$refs.form.reset();
             }
         },
         computed: {

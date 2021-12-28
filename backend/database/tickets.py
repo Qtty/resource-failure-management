@@ -8,46 +8,52 @@ class Tickets():
         self.tickets = db['tickets']
 
     def get_ticket(self, _id: str, resp_id: str) -> dict:
-        res = self.tickets.find_one({
-            '_id': ObjectId(_id),
-            'resp_id': ObjectId(resp_id)
-        })
+        try:
+            res = self.tickets.find_one({
+                '_id': ObjectId(_id),
+                'resp_id': ObjectId(resp_id)
+            })
 
-        if res:
-            res = {
-                '_id': res['_id'].binary.hex(),
-                'description': res['description'],
-                'resource_id': res['resource_id'].binary.hex(),
-                'name': res['name'],
-                'date': res['date'].strftime("%Y/%m/%d %H:%M:%S")
-            }
+            if res:
+                res = {
+                    '_id': res['_id'].binary.hex(),
+                    'description': res['description'],
+                    'resource_id': res['resource_id'].binary.hex(),
+                    'name': res['name'],
+                    'date': res['date'].strftime("%Y/%m/%d %H:%M:%S")
+                }
 
-            return res
+                return res
+        except Exception:
+            return None
 
         return None
 
     def get_tickets(self, resp_id: str = None, res_id: str = None) -> list:
-        if resp_id:
-            res = self.tickets.find({
-                'resp_id': ObjectId(resp_id)
-            })
-        elif res_id:
-            res = self.tickets.find({
-                'resource_id': ObjectId(res_id)
-            })
-        else:
+        try:
+            if resp_id:
+                res = self.tickets.find({
+                    'resp_id': ObjectId(resp_id)
+                })
+            elif res_id:
+                res = self.tickets.find({
+                    'resource_id': ObjectId(res_id)
+                })
+            else:
+                return None
+
+            if res:
+                res = [{
+                    '_id': i['_id'].binary.hex(),
+                    'description': i['description'],
+                    'resource_id': i['resource_id'].binary.hex(),
+                    'name': i['name'],
+                    'date': i['date'].strftime("%Y/%m/%d %H:%M:%S")
+                } for i in res]
+
+                return res
+        except Exception:
             return None
-
-        if res:
-            res = [{
-                '_id': i['_id'].binary.hex(),
-                'description': i['description'],
-                'resource_id': i['resource_id'].binary.hex(),
-                'name': i['name'],
-                'date': i['date'].strftime("%Y/%m/%d %H:%M:%S")
-            } for i in res]
-
-            return res
 
         return None
 

@@ -84,6 +84,17 @@
                     </v-btn>
 
                 </v-form>
+
+                <v-alert
+                class="my-3"
+                dismissible
+                text
+                type="success"
+                v-model="added"
+                >
+                    Anomalie Signalée
+                </v-alert>
+
             </v-card>
 
             <v-card
@@ -131,6 +142,7 @@ export default {
     data: () => ({
         valid: true,
         show: false,
+        added: false,
         resource: {name: '', _id: '', description: '', localisation: ''},
         exists: false,
         tickets: [],
@@ -154,9 +166,9 @@ export default {
             this.$http.put(`${this.$api}/tickets`, {'desc': this.description, 'res_id': this.resource._id, 'nom': this.nom}, {
                 headers: {'Authorization': this.$cookies.get('Authorization')},
             })
-            .then(response => {
-                console.log(response);
+            .then(() => {
                 this.getTickets();
+                this.added = true;
             });
 
             this.$refs.form.reset();
@@ -184,7 +196,6 @@ export default {
                 params: {'res_id': this.$route.params._id}
             })
             .then(response => {
-                console.log(response.body);
                 this.tickets = response.body;
             });
         }

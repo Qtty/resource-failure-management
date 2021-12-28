@@ -42,14 +42,17 @@
           Validate
         </v-btn>
 
-        <v-btn
-          color="success"
-          class="mr-4"
-          @click="checkAuth"
-        >
-          Check Auth
-        </v-btn>
       </v-form>
+
+      <v-alert
+      class="my-3"
+      dismissible
+      text
+      type="error"
+      v-show="error.exists"
+      >
+        {{ error.text }}
+      </v-alert>
     </v-card>
   </v-container>
 </template>
@@ -62,6 +65,7 @@
       is_auth: false,
       valid: true,
       show: false,
+      error: {exists: false, text: ''},
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -81,13 +85,13 @@
           password: this.password
         })
         .then(response => {
-          console.log(response.body);
           this.$cookies.set('Authorization', 'Bearer ' + response.body['session'], '1d');
           this.is_auth = true;
           this.checkAuth();
         }, response => {
           this.is_auth = false;
-          console.log(response.body);
+          this.error.exists = true;
+          this.error.text = response.body;
         });
 
       },
@@ -97,7 +101,6 @@
           headers: {'Authorization': this.$cookies.get('Authorization')}
         })
         .then(response => {
-          console.log(response.body);
           this.is_auth = true;
           if (response.body.is_admin)
             this.$router.push("admin");

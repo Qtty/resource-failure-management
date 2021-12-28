@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import send_from_directory
 from flask_restful import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -16,8 +17,16 @@ jwt = JWTManager(app)
 api = Api(app)
 
 SALT = "U!'\xcd\xe0c^+\xb1V\x97\x8f\x02{\xbd\xfb"
+DOMAIN = "http://192.168.0.24:5000"
+FRONT = "http://localhost:8080"
 environ["SALT"] = SALT
+environ["DOMAIN"] = DOMAIN
+environ["FRONT"] = FRONT
 app.config["JWT_SECRET_KEY"] = "yellow submarine"
+
+@app.route('/qrcode/<path:path>')
+def send_img(path):
+    return send_from_directory('qrcodes', path)
 
 api.add_resource(Login, "/api/login")
 api.add_resource(Admin, "/api/admin")
