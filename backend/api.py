@@ -17,7 +17,7 @@ jwt = JWTManager(app)
 api = Api(app)
 
 SALT = "U!'\xcd\xe0c^+\xb1V\x97\x8f\x02{\xbd\xfb"
-DOMAIN = "http://192.168.0.24:5000"
+DOMAIN = "http://localhost:5000"
 FRONT = "http://localhost:8080"
 environ["SALT"] = SALT
 environ["DOMAIN"] = DOMAIN

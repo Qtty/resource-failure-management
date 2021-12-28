@@ -247,7 +247,7 @@
                 })
             },
             visualise: function(_id) {
-                window.open(`${this.$domain}/etiquette/${_id}`);
+                this.$router.push(`/etiquette/${_id}`);
             },
             validate: function() {
                 this.$refs.form.validate();
