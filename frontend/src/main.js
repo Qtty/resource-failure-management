@@ -10,7 +10,7 @@ Vue.use(VueCookies);
 
 Vue.config.productionTip = false
 
-Vue.prototype.$api = 'http://localhost:5000/api'
+Vue.prototype.$api = '/api'
 Vue.prototype.$is_logged = false
 
 new Vue({

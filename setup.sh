@@ -1,33 +1,5 @@
 #!/bin/bash
 
-
-# Install Backend Dependencies
-
-echo "[~] Installing Backend Dependencies"
-
-apt update
-apt install python3 python3-pip
-pip3 install virtualenv
-virtualenv -p /usr/bin/python3 venv
-./venv/bin/pip install wheel
-./venv/bin/pip install -r backend/requirements.txt
-
-echo "[+] Backend Dependencies installed"
-
-# Install Frontend Dependencies
-
-echo "[~] Installing Frontend Dependencies"
-
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-nvm install 16
-nvm use 16
-npm install vue
-npm install -g @vue/cli
-
-echo "[+] Frontend Dependencies installed"
-
 # Install Docker
 
 echo "[~] Installing Docker Dependencies"
@@ -41,27 +13,16 @@ usermod -aG docker ${USER}
 
 echo "[+] Docker installed"
 
-# Install MongoDB
+# Install Docker Compose
 
-echo "[~] Installing MongoDB"
+echo "[~] Installing Docker Compose"
 
-docker pull mongo
-docker run --name db -d mongo
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-echo "[+] MongoDB Up and Running"
+echo "[+] Docker Compose installed"
 
-# Run the Frontend and the Backend
+# Launching the app
 
-apt install tmux
-
-echo "[~] Launching Backend"
-
-tmux new-session -s "backend" -c ./backend -d
-tmux send-keys -t "backend" "../backend.sh" Enter
-
-echo "[~] Launching Frontend"
-
-tmux new-session -s "frontend" -c ./frontend -d
-tmux send-keys -t "frontend" "../frontend.sh" Enter 
-
-echo "[+] Done."
+docker-compose up --build

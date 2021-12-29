@@ -21,4 +21,4 @@ class DB_Api():
         return Tickets(self.db)
 
 
-db = DB_Api("172.17.0.2", "root", "root", False)
+db = DB_Api("db", "root", "root", False)

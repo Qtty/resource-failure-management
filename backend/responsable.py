@@ -15,7 +15,10 @@ def check_if_resp() -> str:
     claims = get_jwt()
 
     res = db.users().get_user(_id=_id)
-    if not claims['is_resp'] or not res['is_resp']:
+    try:
+        if not claims['is_resp'] or not res['is_resp']:
+            return None
+    except Exception:
         return None
 
     return _id
@@ -49,7 +52,8 @@ class Responsable(Resource):
     ]
 
     post_args = [
-        '_id'
+        '_id',
+        'url'
     ]
 
     @check_if_resp_decorator
@@ -82,8 +86,7 @@ class Responsable(Resource):
 
         if check_if_resp_of_ressource(data['_id'], get_jwt_identity()):
 
-            res['url'] = f'{environ["FRONT"]}/resource/{res["_id"]}'
-            res['qrcode_url'] = f'{environ["DOMAIN"]}/qrcode/{res["_id"]}.png'
+            res['url'] = f'{data["url"]}/resource/{res["_id"]}'
 
             img = qrcode.make(res['url'])
             img.save(f'qrcodes/{data["_id"]}.png')

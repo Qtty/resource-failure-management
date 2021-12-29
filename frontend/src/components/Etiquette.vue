@@ -50,12 +50,15 @@ export default {
     }),
     methods: {
         getEtiq: function() {
-            this.$http.post(`${this.$api}/responsable`, {_id: this.$route.params._id}, {
+            this.$http.post(`${this.$api}/responsable`, {
+              _id: this.$route.params._id,
+              url: window.location.origin
+              }, {
                 headers: {'Authorization': this.$cookies.get('Authorization')},
             })
             .then(response => {
               this.error.exists = false;
-              this.etiquette.qrcode_url = response.body.qrcode_url;
+              this.etiquette.qrcode_url = `${window.location.origin}/api/qrcodes/${this.$route.params._id}.png`;
               this.etiquette.url = response.body.url;
               this.etiquette.description = response.body.description;
               this.etiquette.localisation = response.body.localisation;

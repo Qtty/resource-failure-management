@@ -9,6 +9,7 @@ from resources import Resources
 from responsable import Responsable
 from tickets import Tickets
 from os import urandom, environ
+from populate import init
 
 
 app = Flask(__name__)
@@ -17,14 +18,12 @@ jwt = JWTManager(app)
 api = Api(app)
 
 SALT = "U!'\xcd\xe0c^+\xb1V\x97\x8f\x02{\xbd\xfb"
-DOMAIN = "http://localhost:5000"
-FRONT = "http://localhost:8080"
 environ["SALT"] = SALT
-environ["DOMAIN"] = DOMAIN
-environ["FRONT"] = FRONT
 app.config["JWT_SECRET_KEY"] = "yellow submarine"
+app.config["PROPAGATE_EXCEPTIONS"] = True
 
-@app.route('/qrcode/<path:path>')
+
+@app.route('/api/qrcodes/<path:path>')
 def send_img(path):
     return send_from_directory('qrcodes', path)
 
@@ -34,6 +33,8 @@ api.add_resource(Resources, "/api/resources")
 api.add_resource(Responsable, "/api/responsable")
 api.add_resource(Tickets, '/api/tickets')
 
+init()
+
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0')
