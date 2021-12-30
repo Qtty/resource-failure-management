@@ -6,7 +6,6 @@ COPY . .
 
 RUN npm install
 RUN npm run build
-RUN mkdir qrcodes
 
 
 FROM nginx

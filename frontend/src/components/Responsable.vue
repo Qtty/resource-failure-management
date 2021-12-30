@@ -200,7 +200,8 @@
             items: [
                 { text: 'Lister les Ressources', icon: 'mdi-format-list-bulleted' },
                 { text: 'Ajouter une Ressource', icon: 'mdi-projector' },
-                { text: 'Lister les Tickets d\'Anomalie', icon: 'mdi-ticket-account'}
+                { text: 'Lister les Tickets d\'Anomalie', icon: 'mdi-ticket-account'},
+                { text: 'Logout', icon: 'mdi-logout'}
             ]
         }),
         methods: {
@@ -270,6 +271,11 @@
 
                 if (i == 2)
                     this.getTickets();
+
+                if (i == 3) {
+                    this.$cookies.remove('Authorization');
+                    this.$router.push('/login');
+                }
             }
         },
         computed: {

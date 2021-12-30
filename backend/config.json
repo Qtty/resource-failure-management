@@ -1,8 +1,16 @@
 {
     "db": {
-        "is_initiated": false
+        "username": "hotel",
+        "password": "trivago"
     },
     "admin": {
-        "is_setup": false
-    }
+        "nom": "DOE",
+        "prenom": "John",
+        "mail": "admin@univ-rouen.fr",
+        "password": "madrillet",
+        "is_admin": true,
+        "is_resp": false
+    },
+    "SALT": "552127cde0635e2bb156978f027bbdfb",
+    "nginx_port": "5555"
 }

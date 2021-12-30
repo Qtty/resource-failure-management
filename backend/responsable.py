@@ -6,7 +6,6 @@ from flask_jwt_extended import get_jwt
 from flask_jwt_extended import verify_jwt_in_request
 from utility import check_args
 from database.db_api import db
-from os import environ
 
 
 def check_if_resp() -> str:

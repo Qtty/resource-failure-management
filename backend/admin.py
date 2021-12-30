@@ -15,7 +15,10 @@ def check_if_admin(f):
         claims = get_jwt()
 
         res = db.users().get_user(_id=_id)
-        if not claims['is_admin'] or not res['is_admin']:
+        try:
+            if not claims['is_admin'] or not res['is_admin']:
+                return {'auth': False}, 401
+        except Exception:
             return {'auth': False}, 401
 
         return f(*args)

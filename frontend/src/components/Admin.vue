@@ -13,7 +13,7 @@
                         <v-list-item
                         v-for="(item, i) in items"
                         :key="i"
-                        @click="selectedItem = i"
+                        @click="updateData(i)"
                         >
                         <v-list-item-icon>
                             <v-icon v-text="item.icon"></v-icon>
@@ -163,6 +163,7 @@
             items: [
                 { text: 'Lister les Responsables', icon: 'mdi-format-list-bulleted' },
                 { text: 'Ajouter un Responsable', icon: 'mdi-account' },
+                { text: 'Logout', icon: 'mdi-logout'}
             ]
         }),
         methods: {
@@ -173,7 +174,6 @@
                 .then(response => {
                     this.resps = response.body;
                     this.is_admin = true;
-                    this.$is_logged = true;
                 }, response => {
                     this.is_admin = false;
                     this.$router.push('login');
@@ -203,6 +203,14 @@
                     this.getResps();
                 });
                 this.$refs.form.reset();
+            },
+            updateData: function(i) {
+                this.selectedItem = i;
+
+                if (i == 2) {
+                    this.$cookies.remove('Authorization');
+                    this.$router.push('/login');
+                }
             }
         },
         computed: {

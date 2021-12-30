@@ -8,8 +8,8 @@ from admin import Admin
 from resources import Resources
 from responsable import Responsable
 from tickets import Tickets
-from os import urandom, environ
-from populate import init
+from os import environ
+from json import loads
 
 
 app = Flask(__name__)
@@ -17,8 +17,6 @@ cors = CORS(app)
 jwt = JWTManager(app)
 api = Api(app)
 
-SALT = "U!'\xcd\xe0c^+\xb1V\x97\x8f\x02{\xbd\xfb"
-environ["SALT"] = SALT
 app.config["JWT_SECRET_KEY"] = "yellow submarine"
 app.config["PROPAGATE_EXCEPTIONS"] = True
 
@@ -33,8 +31,10 @@ api.add_resource(Resources, "/api/resources")
 api.add_resource(Responsable, "/api/responsable")
 api.add_resource(Tickets, '/api/tickets')
 
-init()
+with open("config.json", "r") as f:
+    config = loads(f.read())
 
+environ["SALT"] = config['SALT']
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
