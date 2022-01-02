@@ -11,7 +11,6 @@ services:
     depends_on:
       - api
     networks:
-      - frontend
       - backend
 
   api:
@@ -35,6 +34,5 @@ services:
 
 
 networks: 
-  frontend:
   backend:
   db:
